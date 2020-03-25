@@ -6,25 +6,23 @@ import java.util.Date;
 import java.util.Scanner;
 
 import model.entidades.Reserva;
+import model.excecoes.DominioException;
 
 public class Programa {
 
-	public static void main(String[] args) throws ParseException {
+	public static void main(String[] args) {
 		
 		Scanner sc = new Scanner(System.in);
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		
-		System.out.print("Nº Quarto: ");
-		int numeroQuarto = sc.nextInt();
-		System.out.print("Entre com a data de Check-In (DD/MM/AAAA): ");
-		Date checkIn = sdf.parse(sc.next());
-		System.out.print("Entre com a data de Check-Out (DD/MM/AAAA): ");
-		Date checkOut = sdf.parse(sc.next());
-		
-		if(!checkOut.after(checkIn)) {
-			System.out.println("Erro na reserva: Data de entrada deve ser antes da data de Saida");
+		try {
+			System.out.print("Nº Quarto: ");
+			int numeroQuarto = sc.nextInt();
+			System.out.print("Entre com a data de Check-In (DD/MM/AAAA): ");
+			Date checkIn = sdf.parse(sc.next());
+			System.out.print("Entre com a data de Check-Out (DD/MM/AAAA): ");
+			Date checkOut = sdf.parse(sc.next());
 			
-		}else {
 			Reserva reserva = new Reserva(numeroQuarto, checkIn, checkOut);
 			System.out.println("Reserva " + reserva);
 			
@@ -35,14 +33,18 @@ public class Programa {
 			System.out.print("Entre com a data de Check-Out (DD/MM/AAAA): ");
 			checkOut = sdf.parse(sc.next());
 			
-			String erro = reserva.atualizacaoData(checkIn, checkOut);
-			if(erro != null) {
-				System.out.println("Erro na Reverva: " + erro);
-			} else {
-				System.out.println("Reserva " + reserva);
-			}
+			reserva.atualizacaoData(checkIn, checkOut);
+			System.out.println("Reserva " + reserva);
 		}
-		
+		catch(ParseException e) {
+			System.out.println("Formato da data invalido!");
+		}
+		catch(DominioException e) {
+			System.out.println("Erro na reverva " + e.getMessage());
+		}
+		catch(RuntimeException e) {
+			System.out.println("Erro inexperado!");
+		}
 		
 		
 		sc.close();
