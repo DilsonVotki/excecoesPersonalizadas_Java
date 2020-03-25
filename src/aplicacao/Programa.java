@@ -13,7 +13,6 @@ public class Programa {
 		
 		Scanner sc = new Scanner(System.in);
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		Date dataAtual = new Date();
 		
 		System.out.print("Nº Quarto: ");
 		int numeroQuarto = sc.nextInt();
@@ -35,12 +34,11 @@ public class Programa {
 			checkIn = sdf.parse(sc.next());
 			System.out.print("Entre com a data de Check-Out (DD/MM/AAAA): ");
 			checkOut = sdf.parse(sc.next());
-			if(checkIn.before(dataAtual) || checkOut.before(dataAtual)) {
-				System.out.println("Erro na Reserva: As data não podem ser inferiores a hoje!");
-			}else if(!checkOut.after(checkIn)) {
-				System.out.println("Erro na reserva: Data de entrada deve ser antes da data de Saida");
+			
+			String erro = reserva.atualizacaoData(checkIn, checkOut);
+			if(erro != null) {
+				System.out.println("Erro na Reverva: " + erro);
 			} else {
-				reserva.atualizacaoData(checkIn, checkOut);
 				System.out.println("Reserva " + reserva);
 			}
 		}
